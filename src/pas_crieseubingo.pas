@@ -21,6 +21,7 @@ type
     procedure actClick(Sender: TObject);
     procedure actlgClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
 
   public
@@ -51,10 +52,15 @@ begin
 
 end;
 
+procedure TmainS.FormShow(Sender: TObject);
+begin
+
+end;
+
 procedure TmainS.actClick(Sender: TObject);
 begin
   lg.Picture.SaveToFile(ExtractFileDir(GetCurrentDir) + '/img_lg.png');
-  previewS.show;
+  previewS.showModal;
 end;
 
 end.

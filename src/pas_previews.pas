@@ -6,7 +6,8 @@ interface
 
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls;
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  ExtCtrls;
 
 type
 
@@ -18,6 +19,7 @@ type
     n: TImage;
     g: TImage;
     o: TImage;
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
@@ -27,8 +29,10 @@ type
   end;
 
 var
-  previewS: TpreviewS;        
-  rock: array[1..99] of integer;
+  previewS: TpreviewS;
+  i, universal, ac: integer;
+  rock: array of integer;
+  rockAux: array of integer;
   procedure defBingo;
 
 implementation
@@ -40,22 +44,36 @@ implementation
 
 procedure defNmb();
 var
-  i, j: integer;
- rockAUX:  array[1..99] of integer;
+  j: integer;
+begin
+ j:= 1;
+
+ for i:= 1 to universal do
+ begin
+ rock[i] := random(universal) + 1;
+
+ for j := 1 to universal do
+ begin
+
+ if rock[i] = rockAux[j] then
   begin
-    for i := 1 to 99 do
-    begin
-    randomize;
-    rock[i] := random(75)
-    end;
-  end;
+  repeat
+  rock[i] := random(universal) + 1;
+
+  until rock[i] <> rock[j];
+ end;
+ end;
+ rockAux[i] := rock[i];
+ end;
+
+ end;
 
  procedure defBingo();
 var
 objN: TPanel;
 objI: TImage;
 adrss: string;
-countN, posiX, posiY, i: integer;
+countN, posiX, posiY: integer;
 begin
  posiX := 20;
  posiY := 70;
@@ -64,9 +82,10 @@ begin
   begin
   if countN <> 14 then
   begin
+  ac := ac + 1;
   objN := TPanel.create(previewS);
   objN.parent := previewS;
-  objN.name := 'obj' + IntToStr(countN - 1);
+  objN.name := 'obj' + IntToStr(ac);
   objN.left := posiX;
   objN.top := posiY;
   objN.width := 100;
@@ -86,9 +105,10 @@ begin
 
   if countN = 14 then
    begin
+   ac := ac + 1;
    objI := TImage.create(previewS);
    objI.parent := previewS;
-   objI.name := 'imgLG';
+   objI.name := 'imgLG' + IntToStr(ac);
    objI.left := posiX;
    objI.top := posiY;
    objI.width := 100;
@@ -99,7 +119,6 @@ begin
    objI.visible:= true;
    objI.proportional:= true;
    objI.center:= true;
-
 
    end;
 
@@ -114,8 +133,28 @@ end;
 
  end;
 
+procedure TpreviewS.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+
+end;
+
+ procedure zera();
+ begin
+  for i := 1 to universal do
+  begin
+  rock[i] := 0;
+  rockAux[i] := 0;
+  end;
+
+ end;
+
  procedure TpreviewS.FormShow(Sender: TObject);
- begin   
+ begin 
+  universal := 75;
+  SetLength(rock, universal);
+  SetLength(rockAux, universal);
+  zera;
+  randomize;
   defNmb;
   defBingo;
  end;

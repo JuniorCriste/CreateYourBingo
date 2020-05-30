@@ -8,6 +8,7 @@ object previewS: TpreviewS
   ClientHeight = 658
   ClientWidth = 570
   Color = 14342879
+  OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poScreenCenter
